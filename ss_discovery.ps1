@@ -5,19 +5,19 @@ switch ($dtype) {
     "pool" {
         $StoragePools = Get-StoragePool | Where-Object {$_.FriendlyName -ne 'Primordial'}
 
-        echo "{`n `"data`":[`n"
+        Write-Output "{`n `"data`":[`n"
         foreach ($sp in $StoragePools) {
             $line = "{ `n`"{#POOL}`":`"" + $sp.FriendlyName + "`",`n`"{#PDN}`":`"" + $($sp.UniqueId -replace '[{}]') + "`",`n`"{#PH}`":`"0`"`n}`n,"
-            echo $line
+            Write-Output $line
         }
 
-        echo "{`n`"{#POOL}`":`"PLACEHOLDER`",`n`"{#PDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
-        echo " ]`n}"
+        Write-Output "{`n`"{#POOL}`":`"PLACEHOLDER`",`n`"{#PDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
+        Write-Output " ]`n}"
     }
-    
+
     "vdisks" {
         $StoragePools = Get-StoragePool
-        echo "{`n `"data`":[`n"
+        Write-Output "{`n `"data`":[`n"
         foreach ($sp in $StoragePools)
         {
             $VirtualDisks = Get-VirtualDisk -StoragePool $sp
@@ -25,13 +25,13 @@ switch ($dtype) {
             {
            
                 $line = "{ `n`"{#VDISK}`":`"" + $vd.FriendlyName + "`",`n`"{#VDN}`":`"" + $vd.UniqueId + "`",`n`"{#PH}`":`"0`"`n}`n,"
-                echo $line
+                Write-Output $line
             }      
 
         }  
 
-        echo "{`n`"{#VDISK}`":`"PLACEHOLDER`",`n`"{#VDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
-        echo " ]`n}"     
+        Write-Output "{`n`"{#VDISK}`":`"PLACEHOLDER`",`n`"{#VDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
+        Write-Output " ]`n}"     
     }
 }
     

@@ -1,7 +1,7 @@
 ﻿$qtype = $args[0]
 
 if ($args.Count -lt 3) {
-    echo "There is no arguments!"
+    Write-Output "There is no arguments!"
     exit
 }
 
@@ -15,15 +15,15 @@ switch ($qtype) {
             $sp = Get-StoragePool -UniqueId "$qid"
         }
         if (-not $sp) {
-            echo "Object not found!"
+            Write-Output "Object not found!"
             exit
         }
 
         switch ($qparam) {
-            "size" { echo ($sp.Size / 1 ) }
-            "allocated" { echo ($sp.AllocatedSize / 1) }
-            "opstatus" { echo $sp.OperationalStatus }
-            "healthstatus" { echo $sp.HealthStatus }
+            "size" { Write-Output ($sp.Size / 1 ) }
+            "allocated" { Write-Output ($sp.AllocatedSize / 1) }
+            "opstatus" { Write-Output $sp.OperationalStatus }
+            "healthstatus" { Write-Output $sp.HealthStatus }
         }
 
     }
@@ -34,42 +34,42 @@ switch ($qtype) {
         $vd = Get-VirtualDisk -UniqueId "$qid"
 
         if (-not $vd) {
-            echo "Object not found!"
+            Write-Output "Object not found!"
             exit
         }
 
         switch ($qparam) {
             "storagepool" { 
                 $sp = Get-StoragePool -VirtualDisk $vd
-                echo $sp.FriendlyName
+                Write-Output $sp.FriendlyName
             }
-            "size" { echo ($vd.Size / 1) }
-            "writecachesize" { echo ($vd.WriteCacheSize / 1) }
-            "istiered" { if ($vd.IsTiered) { echo 1 } else {echo 0 } }
+            "size" { Write-Output ($vd.Size / 1) }
+            "writecachesize" { Write-Output ($vd.WriteCacheSize / 1) }
+            "istiered" { if ($vd.IsTiered) { Write-Output 1 } else {Write-Output 0 } }
             "ssdtiersize" { 
                 if ($vd.IsTiered) { 
                     $StorageTiers = $vd  | Get-StorageTier
-                    echo (($StorageTiers | Where-Object {$_.MediaType -eq 'SSD'}).Size / 1)
+                    Write-Output (($StorageTiers | Where-Object {$_.MediaType -eq 'SSD'}).Size / 1)
 
                 } else {
-                    echo 0
+                    Write-Output 0
                 }
              }
 
              "hddtiersize" {
                 if ($vd.IsTiered) {
                     $StorageTiers = $vd  | Get-StorageTier
-                    echo (($StorageTiers | Where-Object {$_.MediaType -eq 'HDD'}).Size / 1)
+                    Write-Output (($StorageTiers | Where-Object {$_.MediaType -eq 'HDD'}).Size / 1)
                 } else {
-                    echo 0
+                    Write-Output 0
                 }
              }
 
-             "opstatus" { echo $vd.OperationalStatus }
-             "healthstatus" { echo $vd.HealthStatus }
-             "resiliency" { echo $vd.ResiliencySettingName }
-             "datacopyes" { echo $vd.NumberOfDataCopies }
-             "columns" { echo $vd.NumberofColumns }
+             "opstatus" { Write-Output $vd.OperationalStatus }
+             "healthstatus" { Write-Output $vd.HealthStatus }
+             "resiliency" { Write-Output $vd.ResiliencySettingName }
+             "datacopyes" { Write-Output $vd.NumberOfDataCopies }
+             "columns" { Write-Output $vd.NumberofColumns }
 
         }
 
