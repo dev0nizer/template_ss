@@ -27,25 +27,6 @@ switch ($qtype) {
         }
 
     }
-    "enclosure" {
-        $qparam = $args[1]
-        $qid = $args[2]
-
-        $en = Get-StorageEnclosure -UniqueId "$qid"
-
-        if (-not $en) {
-            echo "Object not found!"
-            exit
-        }
-
-        switch ($qparam) {
-            "firmware" { echo $en.FirmwareVersion }
-            "slots" { echo $en.NumberOfSlots }
-            "healthstatus" { echo $en.HealthStatus }
-            "opstatus" { echo $en.OperationalStatus }
-        }
-
-    }
     "vdisks" {
         $qparam = $args[1]
         $qid = $args[2]
@@ -92,51 +73,5 @@ switch ($qtype) {
 
         }
 
-    }
-    "pdisks" {
-        $qparam = $args[1]
-        $qid = $args[2]
-
-        $pd = Get-PhysicalDisk -UniqueId "$qid"
-
-        if ($qparam -in ("readlatency","writelatency","readerrors","writeerrors","poweronhours","temperature","temperaturemax")) {
-            $opsdata = Get-StorageReliabilityCounter -PhysicalDisk $pd
-        }
-        
-
-        if (-not $pd) {
-            echo "Object not found!"
-            exit
-        }
-
-        switch ($qparam) {
-            "manufacturer" { echo $pd.Manufacturer }
-            "model" { echo $pd.Model }
-            "slot" { echo $pd.SlotNumber }
-            "enclosureid" { 
-                $findstrg = $pd.PhysicalLocation -match '[0-9a-z]{16}'
-                $EnslosureID = $matches[0]
-                echo ($EnslosureID)
-             }
-            "mediatype" { echo $pd.MediaType }
-            "size" { echo ($pd.Size / 1) }
-            "firmware" { echo $pd.FirmwareVersion }
-            "usage" { echo $pd.Usage }
-            "opstatus" { echo $pd.OperationalStatus }
-            "healthstatus" { echo $pd.HealthStatus }
-            "readlatency" { echo $opsdata.ReadLatencyMax }
-            "writelatency" { echo $opsdata.WriteLatencyMax }
-            "readerrors" { if ( $opsdata.ReadErrorsTotal -eq 0 -Or $opsdata.ReadErrorsTotal -gt 0 ) { echo $opsdata.ReadErrorsTotal } else { echo 0 } }
-            "writeerrors" { if ( $opsdata.WriteErrorsTotal -eq 0 -Or $opsdata.WriteErrorsTotal -gt 0 ) { echo $opsdata.ReadErrorsTotal } else { echo 0 } }
-            "poweronhours" { echo $opsdata.PowerOnHours }
-            "temperature" { echo $opsdata.Temperature }
-            "temperaturemax" { echo $opsdata.TemperatureMax }
-        }
-
-    }
-
-    default {
-        echo "Query type is not walid!"
-        exit
     }
 }

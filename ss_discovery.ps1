@@ -14,17 +14,6 @@ switch ($dtype) {
         echo "{`n`"{#POOL}`":`"PLACEHOLDER`",`n`"{#PDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
         echo " ]`n}"
     }
-
-    "enclosure" {
-        $Enclosures = Get-StorageEnclosure | select *
-        echo "{`n `"data`":[`n"
-        foreach ($en in $Enclosures) {
-            $line = "{ `n`"{#ENCLOSURE}`":`"" + $en.FriendlyName + "`",`n`"{#EDN}`":`"" + $en.UniqueId + "`",`n`"{#PH}`":`"0`"`n}`n,"
-            echo $line    
-        }
-        echo "{`n`"{#ENCLOSURE}`":`"PLACEHOLDER`",`n`"{#EDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
-        echo " ]`n}"    
-    }
     
     "vdisks" {
         $StoragePools = Get-StoragePool
@@ -42,21 +31,6 @@ switch ($dtype) {
         }  
 
         echo "{`n`"{#VDISK}`":`"PLACEHOLDER`",`n`"{#VDN}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
-        echo " ]`n}"     
-    }
-
-    "pdisks" {
-        $pdisks = Get-PhysicalDisk | where {($_.canpool) -or ($_.CannotPoolReason -match 'In a Pool')}
-        echo "{`n `"data`":[`n"
-        foreach ($pd in $pdisks)
-        {
-
-
-            $line = "{ `n`"{#PDISK}`":`"" + $pd.SerialNumber + "`",`n`"{#PDN}`":`"" + $pd.UniqueId + "`",`n`"{#PH}`":`"0`"`n}`n,"
-            echo $line
-
-        }
-        echo "{`n`"{#PDISK}`":`"PLACEHOLDER`",`n`"{#PH}`":`"1`"`n}`n"
         echo " ]`n}"     
     }
 }
