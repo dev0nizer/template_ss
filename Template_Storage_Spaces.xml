@@ -359,7 +359,7 @@
                             </application_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Virtual disk {#VDISK} data copyes</name>
+                            <name>Virtual disk {#VDISK} data copies</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
